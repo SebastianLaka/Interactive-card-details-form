@@ -7,4 +7,7 @@ $color-main: rgb(57, 143, 0);
 p {
   color: $color-main;
 }
+p{
+  color: red;
+}
 </style>
