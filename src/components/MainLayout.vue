@@ -1,13 +1,13 @@
 <script setup>
-import HeaderArea from './HeaderArea.vue'
+import MainImageArea from './MainImageArea.vue'
 </script>
 <template>
   <main class="main-area">
-    <HeaderArea>
+    <MainImageArea>
       <template #header>
-        <div class="header-area"></div>
+        <div class="background-area"></div>
       </template>
-    </HeaderArea>
+    </MainImageArea>
   </main>
 </template>
 <style lang="scss" scoped>
@@ -15,7 +15,7 @@ import HeaderArea from './HeaderArea.vue'
   .main-area {
     display: flex;
     flex-direction: column;
-    .header-area {
+    .background-area {
       background-image: url('../assets/images/bg-main-mobile.png');
       min-height: 40svh;
       background-position: center center;
@@ -27,7 +27,7 @@ import HeaderArea from './HeaderArea.vue'
   .main-area {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
-    .header-area {
+    .background-area {
       background-image: url('../assets/images/bg-main-desktop.png');
       min-height: 100svh;
       grid-column: 1/6;
