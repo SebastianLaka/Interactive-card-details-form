@@ -1,7 +1,11 @@
-<script setup></script>
+<script setup>
+import MainLayout from './components/MainLayout.vue';
+
+</script>
 <template>
-  <p>hello</p>
+  <MainLayout/>
 </template>
 <style lang="scss">
 @use './assets/sass/reset' as *;
+
 </style>
