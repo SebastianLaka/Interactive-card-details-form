@@ -1,6 +1,17 @@
 <script setup>
+import { ref } from 'vue'
 import MainImageArea from './MainImageArea.vue'
 import CardsArea from './CardsArea.vue'
+import CardLogo from '../assets/icons/card-logo.svg'
+const cvc = ref('000')
+const frontCardData = ref({
+  cardNumber: '0000 0000 0000 0000',
+  cardOwner: 'JANE APPLESSED',
+  cardMonth: '00',
+  cardYear: '00',
+  cardLogo: CardLogo,
+  cardAlt: 'Logo in card',
+})
 </script>
 <template>
   <main class="main-area">
@@ -9,16 +20,35 @@ import CardsArea from './CardsArea.vue'
         <div class="background-area"></div>
       </template>
     </MainImageArea>
-    <CardsArea>
+    <CardsArea :card-data="frontCardData">
       <template #default>
-        <div class="card-back"></div>
-        <div class="card-front"></div>
+        <div class="card-back">
+          <p class="card-back__cvc">{{ cvc }}</p>
+        </div>
+        <div class="card-front">
+          <img
+            :src="frontCardData.cardLogo"
+            :alt="frontCardData.cardAlt"
+            class="card-front__card-image"
+          />
+          <div class="card-front-data">
+            <p class="card-front-data__card-number">{{ frontCardData.cardNumber }}</p>
+            <div class="card-front-person-data">
+              <p class="card-front-person-data__owner-name">{{ frontCardData.cardOwner }}</p>
+              <p class="card-front-person-data__owner-birth-date">
+                {{ frontCardData.cardMonth }}/{{ frontCardData.cardYear }}
+              </p>
+            </div>
+          </div>
+        </div>
       </template>
     </CardsArea>
+    
   </main>
 </template>
 <style lang="scss" scoped>
-@media (min-width: 320px) {
+@use '../assets/sass/colors' as *;
+@media (min-width: 375px) {
   .main-area {
     display: flex;
     flex-direction: column;
@@ -32,51 +62,84 @@ import CardsArea from './CardsArea.vue'
     .card-back,
     .card-front {
       background-position: center center;
-      background-size: contain;
+      background-size: cover;
       background-repeat: no-repeat;
       border-radius: 0.8em;
       position: absolute;
-      top: 5vw;
-      bottom: 10vw;
+      width: 75vw;
+      height: 47vw; 
     }
     .card-back {
       background-image: url('../assets/images/bg-card-back.png');
-      width: 70vw;
-      right: 4vw;
-      left: auto;
+      right: .75em;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 2em;
+      top: 4.5em;
+      &__cvc {
+        color: $gray-200;
+        padding-bottom: 0.25em;
+      }
     }
     .card-front {
       background-image: url('../assets/images/bg-card-front.png');
-      width: 70vw;
-      left: 4vw;
-      right: auto;
-      top: 7.7vw;
-      transform: translateY(20.5vw);
+      left: .75em;
+      top: 164px;
+      display: flex;
+      justify-content: space-between;
+      flex-direction: column;
+      padding: 1.25em;
+      transform: translateY(10vw);
+      &__card-image {
+        align-self: start;
+        width: 4.25em;
+        height: 2.5em;
+      }
+      .card-front-data {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        &__card-number {
+          color: $gray-200;
+          font-size: clamp(0.915rem, 2vw, 1.5rem);
+          word-spacing: 2.4vw;
+        }
+        .card-front-person-data {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          &__owner-name,
+          &__owner-birth-date {
+            color: $gray-200;
+            padding-top: .75em;
+            font-size: .675rem;
+          }
+        }
+      }
     }
   }
 }
-@media (min-width: 585px){
-  .main-area{
-    .card-front, .card-back{
+@media (min-width: 570px) {
+  .main-area {
+    .card-front,
+    .card-back {
       width: 447px;
       height: 245px;
       top: auto;
       bottom: auto;
       transform: none;
     }
-     .card-back{
-      top: 50px; 
-      left: 60%;
-      margin-left: -223.5px; 
-      right: auto; 
+    .card-back {
+      top: 50px;
+      left: 55%;
+      margin-left: -223.5px;
+      right: auto;
     }
-    .card-front{
-    
-      top: 188px; 
-      
-      /* Poziom: +40px w prawo od karty tylnej (-223.5px + 40px) */
-      left: 45%;
-      margin-left: -183.5px; /* -223.5px + 40px */
+    .card-front {
+      top: 188px;
+      left: 37.5%;
+      margin-left: -183.5px;
     }
   }
 }
