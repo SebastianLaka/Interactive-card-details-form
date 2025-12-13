@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import MainImageArea from './MainImageArea.vue'
 import CardsArea from './CardsArea.vue'
 import FormArea from './FormArea.vue'
+import FormButton from './FormButton.vue'
 import CardLogo from '../assets/icons/card-logo.svg'
 const cvc = ref('000')
 const frontCardData = ref({
@@ -91,6 +92,7 @@ const formsData = ref([
           </label>
         </template>
       </FormArea>
+      <FormButton>Confirm</FormButton>
     </div>
   </main>
 </template>
