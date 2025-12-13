@@ -174,25 +174,26 @@ const formsData = ref([
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       grid-template-rows: repeat(3, 1fr);
-      gap: 2em .5em;
+      gap: 2em 0.5em;
       padding: 0 1em;
-      .form-field-1, .form-field-2 {
+      .form-field-1,
+      .form-field-2 {
         grid-column: 1/4;
       }
-      .form-field-2{
+      .form-field-2 {
         grid-row: 2/3;
       }
-      .form-field-3{
+      .form-field-3 {
         grid-column: 1/1;
         grid-row: 3/4;
         min-width: 25%;
       }
-      .form-field-4{
+      .form-field-4 {
         grid-column: 2/3;
         grid-row: 3/4;
         min-width: 25%;
       }
-      .form-field-5{
+      .form-field-5 {
         grid-column: 3/4;
         grid-row: 3/4;
         min-width: 50%;
@@ -231,7 +232,7 @@ const formsData = ref([
       left: 37.5%;
       margin-left: -183.5px;
     }
-    .form-container{
+    .form-container {
       margin: 0 auto;
       padding: 0;
     }
@@ -242,10 +243,24 @@ const formsData = ref([
   .main-area {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(3, 1fr);
     .background-area {
       background-image: url('../assets/images/bg-main-desktop.png');
       min-height: 100svh;
-      grid-column: 1/6;
+      grid-column: 1/5;
+    }
+    .card-front{
+      top: 15%;
+      left: 25%;
+    }
+    .card-back{
+      top: 50%;
+      left: 30%;
+      padding: 3em;
+    }
+    .form-container{
+      grid-column: 8/12;
+      place-self: center;
     }
   }
 }
