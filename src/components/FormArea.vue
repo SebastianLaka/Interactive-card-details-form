@@ -1,5 +1,13 @@
-<script setup></script>
+<script setup>
+const props = defineProps({
+    formData: {
+        type: Object,
+        required: true,
+    }
+});
+</script>
 <template>
-    <slot></slot>
+    <div class="form-group-wrapper">
+        <slot></slot>
+    </div>
 </template>
-<style lang="scss" scoped></style>

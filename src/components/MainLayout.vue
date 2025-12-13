@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import MainImageArea from './MainImageArea.vue'
 import CardsArea from './CardsArea.vue'
+import FormArea from './FormArea.vue'
 import CardLogo from '../assets/icons/card-logo.svg'
 const cvc = ref('000')
 const frontCardData = ref({
@@ -12,6 +13,33 @@ const frontCardData = ref({
   cardLogo: CardLogo,
   cardAlt: 'Logo in card',
 })
+const formsData = ref([
+  {
+    id: 1,
+    labelName: 'CARDHOLDER NAME',
+    placeholder: 'Jane Oldman',
+  },
+  {
+    id: 2,
+    labelName: 'CARD NUMBER',
+    placeholder: 'e.g 1234 5678 9123 0000',
+  },
+  {
+    id: 3,
+    labelName: 'EXP. DATE',
+    placeholder: 'MM',
+  },
+  {
+    id: 4,
+    labelName: '(MM/YY)',
+    placeholder: 'YY',
+  },
+  {
+    id: 5,
+    labelName: 'CVC',
+    placeholder: 'e.g. 123',
+  },
+])
 </script>
 <template>
   <main class="main-area">
@@ -43,7 +71,27 @@ const frontCardData = ref({
         </div>
       </template>
     </CardsArea>
-    
+    <div class="form-container">
+      <FormArea
+        v-for="field in formsData"
+        :key="field.id"
+        :form-data="field"
+        :class="`form-field-${field.id}`"
+      >
+        <template #default>
+          <label :for="field.id" class="form-label-area"
+            >{{ field.labelName }}
+            <input
+              :id="field.id"
+              type="text"
+              class="form-field"
+              :placeholder="field.placeholder"
+              :name="field.id"
+            />
+          </label>
+        </template>
+      </FormArea>
+    </div>
   </main>
 </template>
 <style lang="scss" scoped>
@@ -52,6 +100,8 @@ const frontCardData = ref({
   .main-area {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    height: 100svh;
     position: relative;
     .background-area {
       background-image: url('../assets/images/bg-main-mobile.png');
@@ -67,11 +117,11 @@ const frontCardData = ref({
       border-radius: 0.8em;
       position: absolute;
       width: 75vw;
-      height: 47vw; 
+      height: 47vw;
     }
     .card-back {
       background-image: url('../assets/images/bg-card-back.png');
-      right: .75em;
+      right: 0.75em;
       display: flex;
       justify-content: flex-end;
       align-items: center;
@@ -84,7 +134,7 @@ const frontCardData = ref({
     }
     .card-front {
       background-image: url('../assets/images/bg-card-front.png');
-      left: .75em;
+      left: 0.75em;
       top: 164px;
       display: flex;
       justify-content: space-between;
@@ -112,9 +162,47 @@ const frontCardData = ref({
           &__owner-name,
           &__owner-birth-date {
             color: $gray-200;
-            padding-top: .75em;
-            font-size: .675rem;
+            padding-top: 0.75em;
+            font-size: 0.675rem;
           }
+        }
+      }
+    }
+    .form-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 2em .5em;
+      padding: 0 1em;
+      .form-field-1, .form-field-2 {
+        grid-column: 1/4;
+      }
+      .form-field-2{
+        grid-row: 2/3;
+      }
+      .form-field-3{
+        grid-column: 1/1;
+        grid-row: 3/4;
+        min-width: 25%;
+      }
+      .form-field-4{
+        grid-column: 2/3;
+        grid-row: 3/4;
+        min-width: 25%;
+      }
+      .form-field-5{
+        grid-column: 3/4;
+        grid-row: 3/4;
+        min-width: 50%;
+      }
+      .form-label-area {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        .form-field {
+          border-radius: 0.2em;
+          border: 0.1em solid $gray-200;
+          padding: 1em;
         }
       }
     }
@@ -140,6 +228,10 @@ const frontCardData = ref({
       top: 188px;
       left: 37.5%;
       margin-left: -183.5px;
+    }
+    .form-container{
+      margin: 0 auto;
+      padding: 0;
     }
   }
 }
