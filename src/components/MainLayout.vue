@@ -105,6 +105,7 @@ const formsData = ref([
     justify-content: space-between;
     height: 100svh;
     position: relative;
+    padding-bottom: 1em;
     .background-area {
       background-image: url('../assets/images/bg-main-mobile.png');
       min-height: 40svh;
@@ -174,8 +175,8 @@ const formsData = ref([
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       grid-template-rows: repeat(3, 1fr);
-      gap: 2em 0.5em;
-      padding: 0 1em;
+      gap: 1.5em 0.5em;
+      padding: 1em 1em 0;
       .form-field-1,
       .form-field-2 {
         grid-column: 1/4;
@@ -202,6 +203,7 @@ const formsData = ref([
         display: flex;
         flex-direction: column;
         justify-content: center;
+        gap: .25em 0;
         .form-field {
           border-radius: 0.2em;
           border: 0.1em solid $gray-200;
@@ -234,11 +236,9 @@ const formsData = ref([
     }
     .form-container {
       margin: 0 auto;
-      padding: 0;
     }
   }
 }
-
 @media (min-width: 992px) {
   .main-area {
     display: grid;
@@ -261,6 +261,13 @@ const formsData = ref([
     .form-container{
       grid-column: 8/12;
       place-self: center;
+    }
+  }
+}
+@media (min-width: 1440px){
+  .main-area{
+    .form-container{
+      grid-column: 8/11;
     }
   }
 }
