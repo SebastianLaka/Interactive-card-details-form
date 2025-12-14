@@ -5,14 +5,14 @@ import CardsArea from './CardsArea.vue'
 import FormArea from './FormArea.vue'
 import FormButton from './FormButton.vue'
 import CardLogo from '../assets/icons/card-logo.svg'
-const cvc = ref('000')
-const frontCardData = ref({
+const cardData = ref({
   cardNumber: '0000 0000 0000 0000',
   cardOwner: 'JANE APPLESSED',
   cardMonth: '00',
   cardYear: '00',
   cardLogo: CardLogo,
   cardAlt: 'Logo in card',
+  cardCvc: '000',
 })
 const formsData = ref([
   {
@@ -49,23 +49,19 @@ const formsData = ref([
         <div class="background-area"></div>
       </template>
     </MainImageArea>
-    <CardsArea :card-data="frontCardData">
+    <CardsArea :card-data="cardData">
       <template #default>
         <div class="card-back">
-          <p class="card-back__cvc">{{ cvc }}</p>
+          <p class="card-back__cvc">{{ cardData.cardCvc }}</p>
         </div>
         <div class="card-front">
-          <img
-            :src="frontCardData.cardLogo"
-            :alt="frontCardData.cardAlt"
-            class="card-front__card-image"
-          />
+          <img :src="cardData.cardLogo" :alt="cardData.cardAlt" class="card-front__card-image" />
           <div class="card-front-data">
-            <p class="card-front-data__card-number">{{ frontCardData.cardNumber }}</p>
+            <p class="card-front-data__card-number">{{ cardData.cardNumber }}</p>
             <div class="card-front-person-data">
-              <p class="card-front-person-data__owner-name">{{ frontCardData.cardOwner }}</p>
+              <p class="card-front-person-data__owner-name">{{ cardData.cardOwner }}</p>
               <p class="card-front-person-data__owner-birth-date">
-                {{ frontCardData.cardMonth }}/{{ frontCardData.cardYear }}
+                {{ cardData.cardMonth }}/{{ cardData.cardYear }}
               </p>
             </div>
           </div>
@@ -157,7 +153,7 @@ const formsData = ref([
           color: $gray-200;
           font-size: clamp(1.2rem, 5.3vw, 2rem);
           text-align: center;
-       
+
           word-spacing: 1.5vw;
         }
         .card-front-person-data {

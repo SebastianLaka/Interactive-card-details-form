@@ -1,6 +1,6 @@
 <script setup></script>
 <template>
-    <Button class="form-button"><slot></slot></Button>
+    <button class="form-button"><slot/></button>
 </template>
 <style lang="scss" scoped>
     @use '../assets/sass/colors' as *;
