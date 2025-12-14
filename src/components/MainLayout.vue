@@ -18,7 +18,7 @@ const formsData = ref([
   {
     id: 1,
     labelName: 'CARDHOLDER NAME',
-    placeholder: 'Jane Oldman',
+    placeholder: 'e.g Jane Oldman',
   },
   {
     id: 2,
@@ -128,7 +128,7 @@ const formsData = ref([
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      padding: 2em;
+      padding: 2em 1.25em;
       top: 4.5em;
       &__cvc {
         color: $gray-200;
@@ -155,8 +155,10 @@ const formsData = ref([
         justify-content: space-between;
         &__card-number {
           color: $gray-200;
-          font-size: clamp(0.915rem, 2vw, 1.5rem);
-          word-spacing: 2.4vw;
+          font-size: clamp(1.2rem, 5.3vw, 2rem);
+          text-align: center;
+       
+          word-spacing: 1.5vw;
         }
         .card-front-person-data {
           display: flex;
@@ -203,7 +205,9 @@ const formsData = ref([
         display: flex;
         flex-direction: column;
         justify-content: center;
-        gap: .25em 0;
+        gap: 0.4em 0;
+        font-size: 0.875rem;
+        letter-spacing: 0.1em;
         .form-field {
           border-radius: 0.2em;
           border: 0.1em solid $gray-200;
@@ -228,11 +232,18 @@ const formsData = ref([
       left: 55%;
       margin-left: -223.5px;
       right: auto;
+      padding: 3em;
     }
     .card-front {
       top: 188px;
       left: 37.5%;
       margin-left: -183.5px;
+      .card-front-data {
+        &__card-number {
+          font-size: clamp(1.5rem, 6vw, 2rem);
+          word-spacing: 1.75vw;
+        }
+      }
     }
     .form-container {
       margin: 0 auto;
@@ -249,24 +260,29 @@ const formsData = ref([
       min-height: 100svh;
       grid-column: 1/5;
     }
-    .card-front{
+    .card-front {
       top: 15%;
       left: 25%;
+      .card-front-data {
+        &__card-number {
+          word-spacing: 1vw;
+        }
+      }
     }
-    .card-back{
+    .card-back {
       top: 50%;
       left: 30%;
       padding: 3em;
     }
-    .form-container{
+    .form-container {
       grid-column: 8/12;
       place-self: center;
     }
   }
 }
-@media (min-width: 1440px){
-  .main-area{
-    .form-container{
+@media (min-width: 1440px) {
+  .main-area {
+    .form-container {
       grid-column: 8/11;
     }
   }

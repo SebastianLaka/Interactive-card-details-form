@@ -12,12 +12,14 @@ h4,
 h5,
 h6,
 label,
-p {
+p,
+button,
+input::placeholder {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 1.125rem;
   font-weight: 500;
 }
-button{
+button {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 1.125rem;
 }
