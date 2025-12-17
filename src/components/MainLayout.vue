@@ -14,33 +14,55 @@ const cardData = ref({
   cardAlt: 'Logo in card',
   cardCvc: '000',
 })
-const formsData = ref([
+const formInputData = ref({
+  cardOwner: '',
+  cardNumber: '',
+  cardMonth: '',
+  cardYear: '',
+  cardCvc: '',
+});
+const staticFormData = [
   {
     id: 1,
     labelName: 'CARDHOLDER NAME',
     placeholder: 'e.g Jane Oldman',
+    modelKey: 'cardOwner',
+    inputType: 'text',
+    maxLength: 30
   },
   {
     id: 2,
     labelName: 'CARD NUMBER',
     placeholder: 'e.g 1234 5678 9123 0000',
+    modelKey: 'cardNumber',
+    inputType: 'text',
+    maxLength: 16
   },
   {
     id: 3,
     labelName: 'EXP. DATE',
     placeholder: 'MM',
+    modelKey: 'cardMonth',
+    inputType: 'text',
+    maxLength: 2
   },
   {
     id: 4,
     labelName: '(MM/YY)',
     placeholder: 'YY',
+    modelKey: 'cardYear',
+    inputType: 'text',
+    maxLength: 2
   },
   {
     id: 5,
     labelName: 'CVC',
     placeholder: 'e.g. 123',
+    modelKey: 'cardCvc',
+    inputType: 'text',
+    maxLength: 3
   },
-])
+]
 </script>
 <template>
   <main class="main-area">
@@ -52,25 +74,25 @@ const formsData = ref([
     <CardsArea :card-data="cardData">
       <template #default>
         <div class="card-back">
-          <p class="card-back__cvc">{{ cardData.cardCvc }}</p>
+          <p class="card-back__cvc">{{ formInputData.cardCvc || cardData.cardCvc }}</p>
         </div>
         <div class="card-front">
           <img :src="cardData.cardLogo" :alt="cardData.cardAlt" class="card-front__card-image" />
           <div class="card-front-data">
-            <p class="card-front-data__card-number">{{ cardData.cardNumber }}</p>
+            <p class="card-front-data__card-number">{{ formInputData.cardNumber || cardData.cardNumber }}</p>
             <div class="card-front-person-data">
-              <p class="card-front-person-data__owner-name">{{ cardData.cardOwner }}</p>
+              <p class="card-front-person-data__owner-name">{{ formInputData.cardOwner || cardData.cardOwner }}</p>
               <p class="card-front-person-data__owner-birth-date">
-                {{ cardData.cardMonth }}/{{ cardData.cardYear }}
+                {{ formInputData.cardMonth || cardData.cardMonth }}/{{ formInputData.cardYear || cardData.cardYear }}
               </p>
             </div>
           </div>
         </div>
       </template>
     </CardsArea>
-    <div class="form-container">
+    <form class="form-container">
       <FormArea
-        v-for="field in formsData"
+        v-for="field in staticFormData"
         :key="field.id"
         :form-data="field"
         :class="`form-field-${field.id}`"
@@ -80,16 +102,18 @@ const formsData = ref([
             >{{ field.labelName }}
             <input
               :id="field.id"
-              type="text"
               class="form-field"
+              :type="field.inputType"
               :placeholder="field.placeholder"
               :name="field.id"
+              :maxlength="field.maxLength"
+              v-model="formInputData[field.modelKey]"
             />
           </label>
         </template>
       </FormArea>
       <FormButton>Confirm</FormButton>
-    </div>
+    </form>
   </main>
 </template>
 <style lang="scss" scoped>
@@ -171,29 +195,28 @@ const formsData = ref([
     }
     .form-container {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(6, 1fr);
       grid-template-rows: repeat(3, 1fr);
-      gap: 1.5em 0.5em;
+      gap: 1.5em .05em;
       padding: 1em 1em 0;
       .form-field-1,
       .form-field-2 {
-        grid-column: 1/4;
+        grid-column: 1/7;
       }
       .form-field-2 {
         grid-row: 2/3;
       }
-      .form-field-3 {
-        grid-column: 1/1;
+      .form-field-3, .form-field-4 {
+        grid-column: 1/2;
         grid-row: 3/4;
         min-width: 25%;
       }
       .form-field-4 {
         grid-column: 2/3;
-        grid-row: 3/4;
         min-width: 25%;
       }
       .form-field-5 {
-        grid-column: 3/4;
+        grid-column: 3/7;
         grid-row: 3/4;
         min-width: 50%;
       }
@@ -202,8 +225,8 @@ const formsData = ref([
         flex-direction: column;
         justify-content: center;
         gap: 0.4em 0;
-        font-size: 0.875rem;
-        letter-spacing: 0.1em;
+        font-size: 0.675rem;
+        letter-spacing: 0.05em;
         .form-field {
           border-radius: 0.2em;
           border: 0.1em solid $gray-200;
@@ -278,6 +301,13 @@ const formsData = ref([
 }
 @media (min-width: 1440px) {
   .main-area {
+  .card-front{
+    .card-front-data {
+        &__card-number {
+        word-spacing: .75vw;
+        }
+      }
+  }
     .form-container {
       grid-column: 8/11;
     }
