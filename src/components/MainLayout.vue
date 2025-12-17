@@ -20,7 +20,8 @@ const formInputData = ref({
   cardMonth: '',
   cardYear: '',
   cardCvc: '',
-});
+  
+})
 const staticFormData = [
   {
     id: 1,
@@ -28,7 +29,8 @@ const staticFormData = [
     placeholder: 'e.g Jane Oldman',
     modelKey: 'cardOwner',
     inputType: 'text',
-    maxLength: 30
+    maxLength: 30,
+    error: 'Wrong format, letters only'
   },
   {
     id: 2,
@@ -36,7 +38,8 @@ const staticFormData = [
     placeholder: 'e.g 1234 5678 9123 0000',
     modelKey: 'cardNumber',
     inputType: 'text',
-    maxLength: 16
+    maxLength: 16,
+    error: 'Wrong format, numbers only'
   },
   {
     id: 3,
@@ -44,7 +47,8 @@ const staticFormData = [
     placeholder: 'MM',
     modelKey: 'cardMonth',
     inputType: 'text',
-    maxLength: 2
+    maxLength: 2,
+    error: "Can't be blank"
   },
   {
     id: 4,
@@ -52,7 +56,8 @@ const staticFormData = [
     placeholder: 'YY',
     modelKey: 'cardYear',
     inputType: 'text',
-    maxLength: 2
+    maxLength: 2,
+    error: "Can't be blank"
   },
   {
     id: 5,
@@ -60,9 +65,17 @@ const staticFormData = [
     placeholder: 'e.g. 123',
     modelKey: 'cardCvc',
     inputType: 'text',
-    maxLength: 3
+    maxLength: 3,
+    error: "Can't be blank"
   },
 ]
+
+const validate = () => {
+  const nameRegexp = /^[A-Za-z\s]+$/
+  const cardNumberRegexp = /^\d{16}$/
+  const cvcRegexp = /^\d{3}$/
+  const dataRegexp = /^\d{2}$/
+}
 </script>
 <template>
   <main class="main-area">
@@ -79,11 +92,17 @@ const staticFormData = [
         <div class="card-front">
           <img :src="cardData.cardLogo" :alt="cardData.cardAlt" class="card-front__card-image" />
           <div class="card-front-data">
-            <p class="card-front-data__card-number">{{ formInputData.cardNumber || cardData.cardNumber }}</p>
+            <p class="card-front-data__card-number">
+              {{ formInputData.cardNumber || cardData.cardNumber }}
+            </p>
             <div class="card-front-person-data">
-              <p class="card-front-person-data__owner-name">{{ formInputData.cardOwner || cardData.cardOwner }}</p>
+              <p class="card-front-person-data__owner-name">
+                {{ formInputData.cardOwner || cardData.cardOwner }}
+              </p>
               <p class="card-front-person-data__owner-birth-date">
-                {{ formInputData.cardMonth || cardData.cardMonth }}/{{ formInputData.cardYear || cardData.cardYear }}
+                {{ formInputData.cardMonth || cardData.cardMonth }}/{{
+                  formInputData.cardYear || cardData.cardYear
+                }}
               </p>
             </div>
           </div>
@@ -110,6 +129,7 @@ const staticFormData = [
               v-model="formInputData[field.modelKey]"
             />
           </label>
+          <p class="form-container__error-info">{{ field.error }}</p>
         </template>
       </FormArea>
       <FormButton>Confirm</FormButton>
@@ -197,7 +217,7 @@ const staticFormData = [
       display: grid;
       grid-template-columns: repeat(6, 1fr);
       grid-template-rows: repeat(3, 1fr);
-      gap: 1.5em .05em;
+      gap: 1.5em 0.05em;
       padding: 1em 1em 0;
       .form-field-1,
       .form-field-2 {
@@ -206,7 +226,8 @@ const staticFormData = [
       .form-field-2 {
         grid-row: 2/3;
       }
-      .form-field-3, .form-field-4 {
+      .form-field-3,
+      .form-field-4 {
         grid-column: 1/2;
         grid-row: 3/4;
         min-width: 25%;
@@ -232,6 +253,10 @@ const staticFormData = [
           border: 0.1em solid $gray-200;
           padding: 1em;
         }
+      }
+      &__error-info{
+        font-size: .65rem;
+        color: $red-400;
       }
     }
   }
@@ -301,13 +326,13 @@ const staticFormData = [
 }
 @media (min-width: 1440px) {
   .main-area {
-  .card-front{
-    .card-front-data {
+    .card-front {
+      .card-front-data {
         &__card-number {
-        word-spacing: .75vw;
+          word-spacing: 0.75vw;
         }
       }
-  }
+    }
     .form-container {
       grid-column: 8/11;
     }
