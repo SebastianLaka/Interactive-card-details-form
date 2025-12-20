@@ -1,11 +1,11 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import MainImageArea from './MainImageArea.vue'
 import CardsArea from './CardsArea.vue'
 import FormArea from './FormArea.vue'
 import FormButton from './FormButton.vue'
 import CardLogo from '../assets/icons/card-logo.svg'
-const cardData = ref({
+const cardContentData = ref({
   cardNumber: '0000 0000 0000 0000',
   cardOwner: 'JANE APPLESSED',
   cardMonth: '00',
@@ -14,68 +14,64 @@ const cardData = ref({
   cardAlt: 'Logo in card',
   cardCvc: '000',
 })
-const formInputData = ref({
+const formModelData = ref({
   cardOwner: '',
   cardNumber: '',
   cardMonth: '',
   cardYear: '',
   cardCvc: '',
-  
 })
-const staticFormData = [
-  {
-    id: 1,
+const formData = ref({
+  name: {
     labelName: 'CARDHOLDER NAME',
     placeholder: 'e.g Jane Oldman',
     modelKey: 'cardOwner',
-    inputType: 'text',
     maxLength: 30,
-    error: 'Wrong format, letters only'
+    error: ''
   },
-  {
-    id: 2,
+  number: {
     labelName: 'CARD NUMBER',
     placeholder: 'e.g 1234 5678 9123 0000',
     modelKey: 'cardNumber',
-    inputType: 'text',
     maxLength: 16,
-    error: 'Wrong format, numbers only'
+    error: ''
   },
-  {
+  month: {
     id: 3,
     labelName: 'EXP. DATE',
     placeholder: 'MM',
     modelKey: 'cardMonth',
-    inputType: 'text',
     maxLength: 2,
-    error: "Can't be blank"
+    error: ''
   },
-  {
+  year: {
     id: 4,
     labelName: '(MM/YY)',
     placeholder: 'YY',
     modelKey: 'cardYear',
-    inputType: 'text',
     maxLength: 2,
-    error: "Can't be blank"
+    error: ''
   },
-  {
+  cvc: {
     id: 5,
     labelName: 'CVC',
     placeholder: 'e.g. 123',
     modelKey: 'cardCvc',
-    inputType: 'text',
     maxLength: 3,
-    error: "Can't be blank"
+    error: ''
   },
-]
+})
 
-const validate = () => {
-  const nameRegexp = /^[A-Za-z\s]+$/
-  const cardNumberRegexp = /^\d{16}$/
-  const cvcRegexp = /^\d{3}$/
-  const dataRegexp = /^\d{2}$/
+const validateForm = () => {
+  const cardOwnerName = formModelData.value.cardOwner;
+  const invalidChars = /[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+  if (cardOwnerName.trim().length <= 1 || invalidChars.test(cardOwnerName)){
+    formData.value.name.error = 'Incorrect name, should contain only letters big or small.'
+  }else{
+    formData.value.name.error = '';
+  }
 }
+
 </script>
 <template>
   <main class="main-area">
@@ -84,24 +80,28 @@ const validate = () => {
         <div class="background-area"></div>
       </template>
     </MainImageArea>
-    <CardsArea :card-data="cardData">
+    <CardsArea :card-data="cardContentData">
       <template #default>
         <div class="card-back">
-          <p class="card-back__cvc">{{ formInputData.cardCvc || cardData.cardCvc }}</p>
+          <p class="card-back__cvc">{{ formModelData.cardCvc || cardContentData.cardCvc }}</p>
         </div>
         <div class="card-front">
-          <img :src="cardData.cardLogo" :alt="cardData.cardAlt" class="card-front__card-image" />
+          <img
+            :src="cardContentData.cardLogo"
+            :alt="cardContentData.cardAlt"
+            class="card-front__card-image"
+          />
           <div class="card-front-data">
             <p class="card-front-data__card-number">
-              {{ formInputData.cardNumber || cardData.cardNumber }}
+              {{ formModelData.cardNumber || cardContentData.cardNumber }}
             </p>
             <div class="card-front-person-data">
               <p class="card-front-person-data__owner-name">
-                {{ formInputData.cardOwner || cardData.cardOwner }}
+                {{ formModelData.cardOwner || cardContentData.cardOwner }}
               </p>
               <p class="card-front-person-data__owner-birth-date">
-                {{ formInputData.cardMonth || cardData.cardMonth }}/{{
-                  formInputData.cardYear || cardData.cardYear
+                {{ formModelData.cardMonth || cardContentData.cardMonth }}/{{
+                  formModelData.cardYear || cardContentData.cardYear
                 }}
               </p>
             </div>
@@ -109,30 +109,83 @@ const validate = () => {
         </div>
       </template>
     </CardsArea>
-    <form class="form-container">
-      <FormArea
-        v-for="field in staticFormData"
-        :key="field.id"
-        :form-data="field"
-        :class="`form-field-${field.id}`"
-      >
+    <form class="form-container" @submit.prevent="checkform">
+      <FormArea class="form-field-1" :form-data="formData.name">
         <template #default>
-          <label :for="field.id" class="form-label-area"
-            >{{ field.labelName }}
+          <label class="form-label-area"
+            >{{ formData.name.labelName }}
             <input
-              :id="field.id"
               class="form-field"
-              :type="field.inputType"
-              :placeholder="field.placeholder"
-              :name="field.id"
-              :maxlength="field.maxLength"
-              v-model="formInputData[field.modelKey]"
+              type="text"
+              :placeholder="formData.name.placeholder"
+              :maxlength="formData.name.maxLength"
+              v-model="formModelData[formData.name.modelKey]"
             />
+            <p class="form-container__error-info">{{ formData.name.error }}</p>
           </label>
-          <p class="form-container__error-info">{{ field.error }}</p>
         </template>
       </FormArea>
-      <FormButton>Confirm</FormButton>
+      <FormArea class="form-field-2" :form-data="formData.number">
+        <template #default>
+          <label class="form-label-area"
+            >{{ formData.number.labelName }}
+            <input
+              class="form-field"
+              type="text"
+              :placeholder="formData.number.placeholder"
+              :maxlength="formData.number.maxLength"
+              v-model="formModelData[formData.number.modelKey]"
+            />
+            <p class="form-container__error-info">{{ formData.number.error }}</p>
+          </label>
+        </template>
+      </FormArea>
+      <FormArea class="form-field-3" :form-data="formData.month">
+        <template #default>
+          <label class="form-label-area"
+            >{{ formData.month.labelName }}
+            <input
+              class="form-field"
+              type="text"
+              :placeholder="formData.month.placeholder"
+              :maxlength="formData.month.maxLength"
+              v-model="formModelData[formData.month.modelKey]"
+            />
+            <p class="form-container__error-info">{{ formData.month.error }}</p>
+          </label>
+        </template>
+      </FormArea>
+      <FormArea class="form-field-4" :form-data="formData.year">
+        <template #default>
+          <label class="form-label-area"
+            >{{ formData.year.labelName }}
+            <input
+              class="form-field"
+              type="text"
+              :placeholder="formData.year.placeholder"
+              :maxlength="formData.year.maxLength"
+              v-model="formModelData[formData.year.modelKey]"
+            />
+            <p class="form-container__error-info">{{ formData.year.error }}</p>
+          </label>
+        </template>
+      </FormArea>
+      <FormArea class="form-field-5" :form-data="formData.cvc">
+        <template #default>
+          <label class="form-label-area"
+            >{{ formData.cvc.labelName }}
+            <input
+              class="form-field"
+              type="text"
+              :placeholder="formData.cvc.placeholder"
+              :maxlength="formData.cvc.maxLength"
+              v-model="formModelData[formData.cvc.modelKey]"
+            />
+            <p class="form-container__error-info">{{ formData.cvc.error }}</p>
+          </label>
+        </template>
+      </FormArea>
+      <FormButton @click="validateForm">Confirm</FormButton>
     </form>
   </main>
 </template>
@@ -197,7 +250,6 @@ const validate = () => {
           color: $gray-200;
           font-size: clamp(1.2rem, 5.3vw, 2rem);
           text-align: center;
-
           word-spacing: 1.5vw;
         }
         .card-front-person-data {
@@ -218,10 +270,11 @@ const validate = () => {
       grid-template-columns: repeat(6, 1fr);
       grid-template-rows: repeat(3, 1fr);
       gap: 1.5em 0.05em;
-      padding: 1em 1em 0;
+      width: 65%;
+      margin: 0 auto;
       .form-field-1,
       .form-field-2 {
-        grid-column: 1/7;
+        grid-column: 1/-1;
       }
       .form-field-2 {
         grid-row: 2/3;
@@ -254,8 +307,8 @@ const validate = () => {
           padding: 1em;
         }
       }
-      &__error-info{
-        font-size: .65rem;
+      &__error-info {
+        font-size: 0.65rem;
         color: $red-400;
       }
     }
@@ -319,7 +372,7 @@ const validate = () => {
       padding: 3em;
     }
     .form-container {
-      grid-column: 8/12;
+      grid-column: 7/-1;
       place-self: center;
     }
   }
@@ -332,9 +385,6 @@ const validate = () => {
           word-spacing: 0.75vw;
         }
       }
-    }
-    .form-container {
-      grid-column: 8/11;
     }
   }
 }
