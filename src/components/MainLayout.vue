@@ -27,14 +27,14 @@ const formData = ref({
     placeholder: 'e.g Jane Oldman',
     modelKey: 'cardOwner',
     maxLength: 30,
-    error: ''
+    error: '',
   },
   number: {
     labelName: 'CARD NUMBER',
     placeholder: 'e.g 1234 5678 9123 0000',
     modelKey: 'cardNumber',
     maxLength: 16,
-    error: ''
+    error: '',
   },
   month: {
     id: 3,
@@ -42,7 +42,7 @@ const formData = ref({
     placeholder: 'MM',
     modelKey: 'cardMonth',
     maxLength: 2,
-    error: ''
+    error: '',
   },
   year: {
     id: 4,
@@ -50,7 +50,7 @@ const formData = ref({
     placeholder: 'YY',
     modelKey: 'cardYear',
     maxLength: 2,
-    error: ''
+    error: '',
   },
   cvc: {
     id: 5,
@@ -58,20 +58,27 @@ const formData = ref({
     placeholder: 'e.g. 123',
     modelKey: 'cardCvc',
     maxLength: 3,
-    error: ''
+    error: '',
+  },
+})
+const readOwnerName = computed({
+  get() {
+    return formModelData.value.cardOwner
+  },
+  set(firstLetter) {
+    formModelData.value.cardOwner = firstLetter.replace(/\b\w/g, (c) => c.toUpperCase());
   },
 })
 
 const validateForm = () => {
-  const cardOwnerName = formModelData.value.cardOwner;
-  const invalidChars = /[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
-  if (cardOwnerName.trim().length <= 1 || invalidChars.test(cardOwnerName)){
-    formData.value.name.error = 'Incorrect name, should contain only letters big or small.'
-  }else{
-    formData.value.name.error = '';
+  const invalidChars = /[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/
+  if (readOwnerName.value.trim().length <= 1 || invalidChars.test(readOwnerName.value)) {
+    formData.value.name.error = 'Name should contain only big or small letters and min. 2 letters.'
+  } else {
+    readOwnerName
+    formData.value.name.error = ''
   }
 }
-
 </script>
 <template>
   <main class="main-area">
@@ -119,7 +126,7 @@ const validateForm = () => {
               type="text"
               :placeholder="formData.name.placeholder"
               :maxlength="formData.name.maxLength"
-              v-model="formModelData[formData.name.modelKey]"
+              v-model="readOwnerName"
             />
             <p class="form-container__error-info">{{ formData.name.error }}</p>
           </label>
