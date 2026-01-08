@@ -3,8 +3,11 @@ import { ref, computed } from 'vue'
 import MainImageArea from './MainImageArea.vue'
 import CardsArea from './CardsArea.vue'
 import FormArea from './FormArea.vue'
+import SuccessNotification from './SuccessNotification.vue'
 import FormButton from './FormButton.vue'
 import CardLogo from '../assets/icons/card-logo.svg'
+import CompleteIcon from '../assets/icons/icon-complete.svg'
+
 const cardContentData = ref({
   cardNumber: '0000 0000 0000 0000',
   cardOwner: 'JANE APPLESSED',
@@ -33,12 +36,12 @@ const formData = ref({
     labelName: 'CARD NUMBER',
     placeholder: 'e.g 1234 5678 9123 0000',
     modelKey: 'cardNumber',
-    maxLength: 16,
+    maxLength: 19,
     error: '',
   },
   month: {
     id: 3,
-    labelName: 'EXP. DATE',
+    labelName: 'EXP. DATE (MM)',
     placeholder: 'MM',
     modelKey: 'cardMonth',
     maxLength: 2,
@@ -46,7 +49,7 @@ const formData = ref({
   },
   year: {
     id: 4,
-    labelName: '(MM/YY)',
+    labelName: '(YY)',
     placeholder: 'YY',
     modelKey: 'cardYear',
     maxLength: 2,
@@ -66,18 +69,106 @@ const readOwnerName = computed({
     return formModelData.value.cardOwner
   },
   set(firstLetter) {
-    formModelData.value.cardOwner = firstLetter.replace(/\b\w/g, (c) => c.toUpperCase());
+    formModelData.value.cardOwner = firstLetter.replace(/\b\w/g, (c) => c.toUpperCase())
   },
 })
-
-const validateForm = () => {
+const readCardNumer = computed({
+  get() {
+    return formModelData.value.cardNumber
+  },
+  set(number) {
+    const clearValue = number.replace(/\D/g, '')
+    if (clearValue.length > 16) {
+      clearValue = clearValue.substring(0, 16)
+    }
+    const format = clearValue.match(/.{1,4}/g)?.join(' ') || ''
+    formModelData.value.cardNumber = format
+  },
+})
+const readCardMonth = computed({
+  get() {
+    return formModelData.value.cardMonth
+  },
+  set(month) {
+    let assignMonth = month.replace(/\D/g, '')
+    if (assignMonth.length > 2) {
+      assignMonth = assignMonth.substring(0, 2)
+    }
+    formModelData.value.cardMonth = assignMonth
+  },
+})
+const readCardYear = computed({
+  get() {
+    return formModelData.value.cardYear
+  },
+  set(year) {
+    const assignYear = year.replace(/[^0-9]/g, '')
+    formModelData.value.cardYear = assignYear
+  },
+})
+const readCardCvc = computed({
+  get() {
+    return formModelData.value.cardCvc
+  },
+  set(cvc) {
+    const assignCvc = cvc.replace(/[^0-9]/g, '')
+    formModelData.value.cardCvc = assignCvc
+  },
+})
+const validateName = () => {
   const invalidChars = /[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/
   if (readOwnerName.value.trim().length <= 1 || invalidChars.test(readOwnerName.value)) {
-    formData.value.name.error = 'Name should contain only big or small letters and min. 2 letters.'
+    formData.value.name.error = 'Name should contain only letters and min. 2 letters.'
   } else {
-    readOwnerName
     formData.value.name.error = ''
   }
+}
+const validateCardNumber = () => {
+  const regexp = /^\d+$/
+  if (regexp.test(readCardNumer.value)) {
+    formData.value.number.error = 'Wrong format, numbers only.'
+  } else if (readCardNumer.value.length < 19) {
+    formData.value.number.error = 'Number should contain only 16 numbers'
+  } else {
+    formData.value.number.error = ''
+  }
+}
+const validateMonth = () => {
+  if (readCardMonth.value.length === 1) {
+    readCardMonth.value = readCardMonth.value.padStart(2, '0')
+    formModelData.value.cardMonth = readCardMonth.value
+  }
+  if (readCardMonth.value === '' || readCardMonth.value === '00') {
+    formData.value.month.error = "Can't be blank"
+  } else if (readCardMonth.value < 1 || readCardMonth.value > 12) {
+    formData.value.month.error = 'Should be 01-12'
+  } else {
+    formData.value.month.error = ''
+  }
+}
+const validateYear = () => {
+  if (readCardYear.value === '') {
+    formData.value.year.error = "Can't be blank"
+  } else {
+    formData.value.year.error = ''
+  }
+}
+const validateCvc = () => {
+  if (readCardCvc.value === '') {
+    formData.value.cvc.error = "Can't be blank"
+  } else if (readCardCvc.value.length < 3) {
+    formData.value.cvc.error = 'CVC should contain 3 numbers.'
+  } else {
+    formData.value.cvc.error = ''
+  }
+}
+
+const validateForm = () => {
+  validateName()
+  validateCardNumber()
+  validateMonth()
+  validateYear()
+  validateCvc()
 }
 </script>
 <template>
@@ -141,7 +232,7 @@ const validateForm = () => {
               type="text"
               :placeholder="formData.number.placeholder"
               :maxlength="formData.number.maxLength"
-              v-model="formModelData[formData.number.modelKey]"
+              v-model="readCardNumer"
             />
             <p class="form-container__error-info">{{ formData.number.error }}</p>
           </label>
@@ -156,7 +247,7 @@ const validateForm = () => {
               type="text"
               :placeholder="formData.month.placeholder"
               :maxlength="formData.month.maxLength"
-              v-model="formModelData[formData.month.modelKey]"
+              v-model="readCardMonth"
             />
             <p class="form-container__error-info">{{ formData.month.error }}</p>
           </label>
@@ -171,7 +262,7 @@ const validateForm = () => {
               type="text"
               :placeholder="formData.year.placeholder"
               :maxlength="formData.year.maxLength"
-              v-model="formModelData[formData.year.modelKey]"
+              v-model="readCardYear"
             />
             <p class="form-container__error-info">{{ formData.year.error }}</p>
           </label>
@@ -186,7 +277,7 @@ const validateForm = () => {
               type="text"
               :placeholder="formData.cvc.placeholder"
               :maxlength="formData.cvc.maxLength"
-              v-model="formModelData[formData.cvc.modelKey]"
+              v-model="readCardCvc"
             />
             <p class="form-container__error-info">{{ formData.cvc.error }}</p>
           </label>
@@ -194,6 +285,15 @@ const validateForm = () => {
       </FormArea>
       <FormButton @click="validateForm">Confirm</FormButton>
     </form>
+    <SuccessNotification>
+      <template #default>
+        <div class="success-notification-container">
+          <h1 class="success-notification-container__header">THANK YOU</h1>
+          <p class="success-notification-container__description">We've added your card details</p>
+          <FormButton class="success-notification-container__button">Continue</FormButton>
+        </div>
+      </template>
+    </SuccessNotification>
   </main>
 </template>
 <style lang="scss" scoped>
@@ -319,6 +419,25 @@ const validateForm = () => {
         color: $red-400;
       }
     }
+    .success-notification-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1em 0;
+      width: 65%;
+      margin: 0 auto;
+      &__header{
+        font-size: 2rem;
+        letter-spacing: .1em;
+        color: $purple-950;
+      }
+      &__description{
+        color: $gray-400;
+      }
+      &__button{
+        width: 100%;
+      }
+    }
   }
 }
 @media (min-width: 570px) {
@@ -379,6 +498,10 @@ const validateForm = () => {
       padding: 3em;
     }
     .form-container {
+      grid-column: 7/-1;
+      place-self: center;
+    }
+    .success-notification-container{
       grid-column: 7/-1;
       place-self: center;
     }
