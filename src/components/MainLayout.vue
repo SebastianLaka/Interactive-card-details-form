@@ -238,8 +238,11 @@ const validateForm = () => {
           </label>
         </template>
       </FormArea>
+      
       <FormArea class="form-field-3" :form-data="formData.month">
+       
         <template #default>
+          
           <label class="form-label-area"
             >{{ formData.month.labelName }}
             <input
@@ -283,7 +286,7 @@ const validateForm = () => {
           </label>
         </template>
       </FormArea>
-      <FormButton @click="validateForm">Confirm</FormButton>
+      <FormButton class="form-container__button" @click="validateForm">Confirm</FormButton>
     </form>
     <SuccessNotification>
       <template #default>
@@ -376,8 +379,8 @@ const validateForm = () => {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
       grid-template-rows: repeat(3, 1fr);
-      gap: 1.5em 0.05em;
-      width: 65%;
+      gap: 1.5em 0.5em;
+      width: 80%;
       margin: 0 auto;
       .form-field-1,
       .form-field-2 {
@@ -388,16 +391,16 @@ const validateForm = () => {
       }
       .form-field-3,
       .form-field-4 {
-        grid-column: 1/2;
+        grid-column: 1/3;
         grid-row: 3/4;
         min-width: 25%;
       }
       .form-field-4 {
-        grid-column: 2/3;
+        grid-column: 3/5;
         min-width: 25%;
       }
       .form-field-5 {
-        grid-column: 3/7;
+        grid-column: 5/7;
         grid-row: 3/4;
         min-width: 50%;
       }
@@ -418,13 +421,16 @@ const validateForm = () => {
         font-size: 0.65rem;
         color: $red-400;
       }
+      &__button{
+        grid-column: 1/ -1;
+      }
     }
     .success-notification-container {
-      display: flex;
+      display: none;
       flex-direction: column;
       align-items: center;
-      gap: 1em 0;
-      width: 65%;
+      gap: 2em 0;
+      width: 75%;
       margin: 0 auto;
       &__header{
         font-size: 2rem;
@@ -470,8 +476,36 @@ const validateForm = () => {
     }
     .form-container {
       margin: 0 auto;
+      .form-field-3,
+      .form-field-4 {
+        grid-column: 1/3;
+      }
+      .form-field-4 {
+        grid-column: 3/5;
+      }
+      .form-field-5 {
+        grid-column: 5/7;
+      }
     }
   }
+}
+@media (min-width: 768px){
+   .main-area {
+     .form-container {
+      gap: 1.5em 1em;
+      .form-field-3,
+      .form-field-4 {
+        grid-column: 1/2;
+        
+      }
+      .form-field-4 {
+        grid-column: 2/3;
+      }
+      .form-field-5 {
+        grid-column: 3/7;
+      }
+    }
+}
 }
 @media (min-width: 992px) {
   .main-area {
@@ -498,12 +532,43 @@ const validateForm = () => {
       padding: 3em;
     }
     .form-container {
+       grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: repeat(3, 1fr);
       grid-column: 7/-1;
       place-self: center;
+      .form-field-3,
+      .form-field-4 {
+        grid-column: 1/4;
+        
+      }
+      .form-field-4 {
+        grid-column: 4/7;
+      }
+      .form-field-5 {
+        grid-column: 7/ -1;
+      }
     }
     .success-notification-container{
       grid-column: 7/-1;
       place-self: center;
+    }
+  }
+}
+@media (min-width: 1200px){
+  .main-area {
+    .form-container{
+      
+       .form-field-3,
+      .form-field-4 {
+        grid-column: 1/4;
+        
+      }
+      .form-field-4 {
+        grid-column: 4/7;
+      }
+      .form-field-5 {
+        grid-column: 7/ -1;
+      }
     }
   }
 }
@@ -514,6 +579,25 @@ const validateForm = () => {
         &__card-number {
           word-spacing: 0.75vw;
         }
+      }
+    }
+    .form-container{
+      .form-field-1, .form-field-2{
+        grid-column: 1/ 10;
+      }
+       .form-field-3,
+      .form-field-4 {
+        grid-column: 1/3;
+        
+      }
+      .form-field-4 {
+        grid-column: 3/5;
+      }
+      .form-field-5 {
+        grid-column: 5/ 10;
+      }
+       &__button{
+        grid-column: 1/ 10;
       }
     }
   }
