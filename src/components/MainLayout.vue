@@ -7,7 +7,7 @@ import SuccessNotification from './SuccessNotification.vue'
 import FormButton from './FormButton.vue'
 import CardLogo from '../assets/icons/card-logo.svg'
 import CompleteIcon from '../assets/icons/icon-complete.svg'
-
+const isVisible = ref(false)
 const cardContentData = ref({
   cardNumber: '0000 0000 0000 0000',
   cardOwner: 'JANE APPLESSED',
@@ -169,6 +169,20 @@ const validateForm = () => {
   validateMonth()
   validateYear()
   validateCvc()
+  const getErrorValue = Object.values(formData.value).find((value) => value.error !== '')
+  if (!getErrorValue) {
+    return (isVisible.value = true)
+  }
+}
+const handleReset = () => {
+  formModelData.value = {
+    cardOwner: '',
+    cardNumber: '',
+    cardMonth: '',
+    cardYear: '',
+    cardCvc: '',
+  }
+  isVisible.value = false
 }
 </script>
 <template>
@@ -207,96 +221,96 @@ const validateForm = () => {
         </div>
       </template>
     </CardsArea>
-    <form class="form-container" @submit.prevent="checkform">
-      <FormArea class="form-field-1" :form-data="formData.name">
+      <form v-if="!isVisible" class="form-container" @submit.prevent="checkform">
+        <FormArea class="form-field-1" :form-data="formData.name">
+          <template #default>
+            <label class="form-label-area"
+              >{{ formData.name.labelName }}
+              <input
+                class="form-field"
+                type="text"
+                :placeholder="formData.name.placeholder"
+                :maxlength="formData.name.maxLength"
+                v-model="readOwnerName"
+              />
+              <p class="form-container__error-info">{{ formData.name.error }}</p>
+            </label>
+          </template>
+        </FormArea>
+        <FormArea class="form-field-2" :form-data="formData.number">
+          <template #default>
+            <label class="form-label-area"
+              >{{ formData.number.labelName }}
+              <input
+                class="form-field"
+                type="text"
+                :placeholder="formData.number.placeholder"
+                :maxlength="formData.number.maxLength"
+                v-model="readCardNumer"
+              />
+              <p class="form-container__error-info">{{ formData.number.error }}</p>
+            </label>
+          </template>
+        </FormArea>
+
+        <FormArea class="form-field-3" :form-data="formData.month">
+          <template #default>
+            <label class="form-label-area"
+              >{{ formData.month.labelName }}
+              <input
+                class="form-field"
+                type="text"
+                :placeholder="formData.month.placeholder"
+                :maxlength="formData.month.maxLength"
+                v-model="readCardMonth"
+              />
+              <p class="form-container__error-info">{{ formData.month.error }}</p>
+            </label>
+          </template>
+        </FormArea>
+        <FormArea class="form-field-4" :form-data="formData.year">
+          <template #default>
+            <label class="form-label-area"
+              >{{ formData.year.labelName }}
+              <input
+                class="form-field"
+                type="text"
+                :placeholder="formData.year.placeholder"
+                :maxlength="formData.year.maxLength"
+                v-model="readCardYear"
+              />
+              <p class="form-container__error-info">{{ formData.year.error }}</p>
+            </label>
+          </template>
+        </FormArea>
+        <FormArea class="form-field-5" :form-data="formData.cvc">
+          <template #default>
+            <label class="form-label-area"
+              >{{ formData.cvc.labelName }}
+              <input
+                class="form-field"
+                type="text"
+                :placeholder="formData.cvc.placeholder"
+                :maxlength="formData.cvc.maxLength"
+                v-model="readCardCvc"
+              />
+              <p class="form-container__error-info">{{ formData.cvc.error }}</p>
+            </label>
+          </template>
+        </FormArea>
+        <FormButton class="form-container__button" @click="validateForm">Confirm</FormButton>
+      </form>
+      <SuccessNotification v-else>
         <template #default>
-          <label class="form-label-area"
-            >{{ formData.name.labelName }}
-            <input
-              class="form-field"
-              type="text"
-              :placeholder="formData.name.placeholder"
-              :maxlength="formData.name.maxLength"
-              v-model="readOwnerName"
-            />
-            <p class="form-container__error-info">{{ formData.name.error }}</p>
-          </label>
+          <div class="success-notification-container">
+            <h1 class="success-notification-container__header">THANK YOU</h1>
+            <p class="success-notification-container__description">We've added your card details</p>
+            <FormButton @click="handleReset" class="success-notification-container__button"
+              >Continue</FormButton
+            >
+          </div>
         </template>
-      </FormArea>
-      <FormArea class="form-field-2" :form-data="formData.number">
-        <template #default>
-          <label class="form-label-area"
-            >{{ formData.number.labelName }}
-            <input
-              class="form-field"
-              type="text"
-              :placeholder="formData.number.placeholder"
-              :maxlength="formData.number.maxLength"
-              v-model="readCardNumer"
-            />
-            <p class="form-container__error-info">{{ formData.number.error }}</p>
-          </label>
-        </template>
-      </FormArea>
-      
-      <FormArea class="form-field-3" :form-data="formData.month">
-       
-        <template #default>
-          
-          <label class="form-label-area"
-            >{{ formData.month.labelName }}
-            <input
-              class="form-field"
-              type="text"
-              :placeholder="formData.month.placeholder"
-              :maxlength="formData.month.maxLength"
-              v-model="readCardMonth"
-            />
-            <p class="form-container__error-info">{{ formData.month.error }}</p>
-          </label>
-        </template>
-      </FormArea>
-      <FormArea class="form-field-4" :form-data="formData.year">
-        <template #default>
-          <label class="form-label-area"
-            >{{ formData.year.labelName }}
-            <input
-              class="form-field"
-              type="text"
-              :placeholder="formData.year.placeholder"
-              :maxlength="formData.year.maxLength"
-              v-model="readCardYear"
-            />
-            <p class="form-container__error-info">{{ formData.year.error }}</p>
-          </label>
-        </template>
-      </FormArea>
-      <FormArea class="form-field-5" :form-data="formData.cvc">
-        <template #default>
-          <label class="form-label-area"
-            >{{ formData.cvc.labelName }}
-            <input
-              class="form-field"
-              type="text"
-              :placeholder="formData.cvc.placeholder"
-              :maxlength="formData.cvc.maxLength"
-              v-model="readCardCvc"
-            />
-            <p class="form-container__error-info">{{ formData.cvc.error }}</p>
-          </label>
-        </template>
-      </FormArea>
-      <FormButton class="form-container__button" @click="validateForm">Confirm</FormButton>
-    </form>
-    <SuccessNotification>
-      <template #default>
-        <div class="success-notification-container">
-          <h1 class="success-notification-container__header">THANK YOU</h1>
-          <p class="success-notification-container__description">We've added your card details</p>
-          <FormButton class="success-notification-container__button">Continue</FormButton>
-        </div>
-      </template>
-    </SuccessNotification>
+      </SuccessNotification>
   </main>
 </template>
 <style lang="scss" scoped>
@@ -421,28 +435,37 @@ const validateForm = () => {
         font-size: 0.65rem;
         color: $red-400;
       }
-      &__button{
+      &__button {
         grid-column: 1/ -1;
       }
     }
     .success-notification-container {
-      display: none;
+      display: flex;
       flex-direction: column;
       align-items: center;
       gap: 2em 0;
       width: 75%;
       margin: 0 auto;
-      &__header{
+      &__header {
         font-size: 2rem;
-        letter-spacing: .1em;
+        letter-spacing: 0.1em;
         color: $purple-950;
       }
-      &__description{
+      &__description {
         color: $gray-400;
       }
-      &__button{
+      &__button {
         width: 100%;
       }
+    }
+    .fade-enter-active,
+    .fade-leave-active {
+      transition: opacity 0.3s ease;
+    }
+
+    .fade-enter-from,
+    .fade-leave-to {
+      opacity: 0;
     }
   }
 }
@@ -489,14 +512,13 @@ const validateForm = () => {
     }
   }
 }
-@media (min-width: 768px){
-   .main-area {
-     .form-container {
+@media (min-width: 768px) {
+  .main-area {
+    .form-container {
       gap: 1.5em 1em;
       .form-field-3,
       .form-field-4 {
         grid-column: 1/2;
-        
       }
       .form-field-4 {
         grid-column: 2/3;
@@ -505,7 +527,7 @@ const validateForm = () => {
         grid-column: 3/7;
       }
     }
-}
+  }
 }
 @media (min-width: 992px) {
   .main-area {
@@ -532,14 +554,13 @@ const validateForm = () => {
       padding: 3em;
     }
     .form-container {
-       grid-template-columns: repeat(12, 1fr);
+      grid-template-columns: repeat(12, 1fr);
       grid-template-rows: repeat(3, 1fr);
       grid-column: 7/-1;
       place-self: center;
       .form-field-3,
       .form-field-4 {
         grid-column: 1/4;
-        
       }
       .form-field-4 {
         grid-column: 4/7;
@@ -548,20 +569,18 @@ const validateForm = () => {
         grid-column: 7/ -1;
       }
     }
-    .success-notification-container{
+    .success-notification-container {
       grid-column: 7/-1;
       place-self: center;
     }
   }
 }
-@media (min-width: 1200px){
+@media (min-width: 1200px) {
   .main-area {
-    .form-container{
-      
-       .form-field-3,
+    .form-container {
+      .form-field-3,
       .form-field-4 {
         grid-column: 1/4;
-        
       }
       .form-field-4 {
         grid-column: 4/7;
@@ -581,14 +600,14 @@ const validateForm = () => {
         }
       }
     }
-    .form-container{
-      .form-field-1, .form-field-2{
+    .form-container {
+      .form-field-1,
+      .form-field-2 {
         grid-column: 1/ 10;
       }
-       .form-field-3,
+      .form-field-3,
       .form-field-4 {
         grid-column: 1/3;
-        
       }
       .form-field-4 {
         grid-column: 3/5;
@@ -596,7 +615,7 @@ const validateForm = () => {
       .form-field-5 {
         grid-column: 5/ 10;
       }
-       &__button{
+      &__button {
         grid-column: 1/ 10;
       }
     }
