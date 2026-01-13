@@ -594,6 +594,27 @@ const handleReset = () => {
         grid-column: 7/ -1;
       }
     }
+    .success-notification-container{
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      text-align: center;
+      grid-column: 7/-1;
+      &__header {
+        grid-column: 2/ 6;
+        grid-row: 1/1;
+        text-align: center;
+      }
+      &__description {
+
+        grid-column: 2/ 6;
+        grid-row: 2/2;
+      }
+      &__button {
+        grid-row: 3/3;
+        grid-column: 0/ 8;
+      }
+    }
   }
 }
 @media (min-width: 1440px) {
