@@ -323,8 +323,7 @@ const handleReset = () => {
 @use "../assets/sass/mixins" as *;
 @media (min-width: 375px) {
   .main-area {
-    @include flex-center;
-    justify-content: space-between;
+    @include flex-space-between;
     height: 100svh;
     position: relative;
     padding-bottom: 1em;
@@ -361,8 +360,7 @@ const handleReset = () => {
       background-image: url('../assets/images/bg-card-front.png');
       left: 0.75em;
       top: 164px;
-      @include flex-center;
-      justify-content: space-between;
+      @include flex-space-between;
       padding: 1.25em;
       transform: translateY(10vw);
       &__card-image {
@@ -371,8 +369,7 @@ const handleReset = () => {
         height: 2.5em;
       }
       .card-front-data {
-        @include flex-center;
-        justify-content: space-between;
+        @include flex-space-between;
         &__card-number {
           color: $gray-200;
           font-size: clamp(1.2rem, 5.3vw, 2rem);
