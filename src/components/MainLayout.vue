@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, reactive } from 'vue'
 import MainImageArea from './MainImageArea.vue'
 import CardsArea from './CardsArea.vue'
 import FormArea from './FormArea.vue'
@@ -221,96 +221,101 @@ const handleReset = () => {
         </div>
       </template>
     </CardsArea>
-      <form v-if="!isVisible" class="form-container" @submit.prevent="checkform">
-        <FormArea class="form-field-1" :form-data="formData.name">
-          <template #default>
-            <label class="form-label-area"
-              >{{ formData.name.labelName }}
-              <input
-                class="form-field"
-                type="text"
-                :placeholder="formData.name.placeholder"
-                :maxlength="formData.name.maxLength"
-                v-model="readOwnerName"
-              />
-              <p class="form-container__error-info">{{ formData.name.error }}</p>
-            </label>
-          </template>
-        </FormArea>
-        <FormArea class="form-field-2" :form-data="formData.number">
-          <template #default>
-            <label class="form-label-area"
-              >{{ formData.number.labelName }}
-              <input
-                class="form-field"
-                type="text"
-                :placeholder="formData.number.placeholder"
-                :maxlength="formData.number.maxLength"
-                v-model="readCardNumer"
-              />
-              <p class="form-container__error-info">{{ formData.number.error }}</p>
-            </label>
-          </template>
-        </FormArea>
-
-        <FormArea class="form-field-3" :form-data="formData.month">
-          <template #default>
-            <label class="form-label-area"
-              >{{ formData.month.labelName }}
-              <input
-                class="form-field"
-                type="text"
-                :placeholder="formData.month.placeholder"
-                :maxlength="formData.month.maxLength"
-                v-model="readCardMonth"
-              />
-              <p class="form-container__error-info">{{ formData.month.error }}</p>
-            </label>
-          </template>
-        </FormArea>
-        <FormArea class="form-field-4" :form-data="formData.year">
-          <template #default>
-            <label class="form-label-area"
-              >{{ formData.year.labelName }}
-              <input
-                class="form-field"
-                type="text"
-                :placeholder="formData.year.placeholder"
-                :maxlength="formData.year.maxLength"
-                v-model="readCardYear"
-              />
-              <p class="form-container__error-info">{{ formData.year.error }}</p>
-            </label>
-          </template>
-        </FormArea>
-        <FormArea class="form-field-5" :form-data="formData.cvc">
-          <template #default>
-            <label class="form-label-area"
-              >{{ formData.cvc.labelName }}
-              <input
-                class="form-field"
-                type="text"
-                :placeholder="formData.cvc.placeholder"
-                :maxlength="formData.cvc.maxLength"
-                v-model="readCardCvc"
-              />
-              <p class="form-container__error-info">{{ formData.cvc.error }}</p>
-            </label>
-          </template>
-        </FormArea>
-        <FormButton class="form-container__button" @click="validateForm">Confirm</FormButton>
-      </form>
-      <SuccessNotification v-else>
+    <form v-if="!isVisible" class="form-container" @submit.prevent="checkform">
+      <FormArea class="form-field-1" :form-data="formData.name">
         <template #default>
-          <div class="success-notification-container">
-            <h1 class="success-notification-container__header">THANK YOU</h1>
-            <p class="success-notification-container__description">We've added your card details</p>
-            <FormButton @click="handleReset" class="success-notification-container__button"
-              >Continue</FormButton
-            >
-          </div>
+          <label class="form-label-area"
+            >{{ formData.name.labelName }}
+            <input
+              class="form-field"
+              type="text"
+              :placeholder="formData.name.placeholder"
+              :maxlength="formData.name.maxLength"
+              :class="{ 'error-color': formData.name.error, 'marked-field-color': readOwnerName.length > 0 && !formData.name.error}"
+              v-model="readOwnerName"
+            />
+            <p class="form-container__error-info">{{ formData.name.error }}</p>
+          </label>
         </template>
-      </SuccessNotification>
+      </FormArea>
+      <FormArea class="form-field-2" :form-data="formData.number">
+        <template #default>
+          <label class="form-label-area"
+            >{{ formData.number.labelName }}
+            <input
+              class="form-field"
+              type="text"
+              :placeholder="formData.number.placeholder"
+              :maxlength="formData.number.maxLength"
+              :class="{ 'error-color': formData.number.error, 'marked-field-color': readCardNumer.length === 19 && !formData.name.error }"
+              v-model="readCardNumer"
+            />
+            <p class="form-container__error-info">{{ formData.number.error }}</p>
+          </label>
+        </template>
+      </FormArea>
+
+      <FormArea class="form-field-3" :form-data="formData.month">
+        <template #default>
+          <label class="form-label-area"
+            >{{ formData.month.labelName }}
+            <input
+              class="form-field"
+              type="text"
+              :placeholder="formData.month.placeholder"
+              :maxlength="formData.month.maxLength"
+              :class="{ 'error-color': formData.month.error, 'marked-field-color': readCardMonth.length >= 1 && !formData.name.error  }"
+              v-model="readCardMonth"
+            />
+            <p class="form-container__error-info">{{ formData.month.error }}</p>
+          </label>
+        </template>
+      </FormArea>
+      <FormArea class="form-field-4" :form-data="formData.year">
+        <template #default>
+          <label class="form-label-area"
+            >{{ formData.year.labelName }}
+            <input
+              class="form-field"
+              type="text"
+              :placeholder="formData.year.placeholder"
+              :maxlength="formData.year.maxLength"
+              :class="{ 'error-color': formData.year.error, 'marked-field-color': readCardYear.length >= 1 && !formData.name.error }"
+              v-model="readCardYear"
+            />
+            <p class="form-container__error-info">{{ formData.year.error }}</p>
+          </label>
+        </template>
+      </FormArea>
+      <FormArea class="form-field-5" :form-data="formData.cvc">
+        <template #default>
+          <label class="form-label-area"
+            >{{ formData.cvc.labelName }}
+            <input
+              class="form-field"
+              type="text"
+              :placeholder="formData.cvc.placeholder"
+              :maxlength="formData.cvc.maxLength"
+              :class="{ 'error-color': formData.cvc.error, 'marked-field-color': readCardCvc.length === 3 && !formData.name.error }"
+              v-model="readCardCvc"
+            />
+            <p class="form-container__error-info">{{ formData.cvc.error }}</p>
+          </label>
+        </template>
+      </FormArea>
+      <FormButton class="form-container__button" @click="validateForm">Confirm</FormButton>
+    </form>
+    <SuccessNotification v-else>
+      <template #default>
+        <div class="success-notification-container">
+          <h1 class="success-notification-container__header">THANK YOU</h1>
+          <p class="success-notification-container__description">We've added your card details</p>
+          <FormButton @click="handleReset" class="success-notification-container__button"
+            >Continue</FormButton
+          >
+        </div>
+      </template>
+    </SuccessNotification>
   </main>
 </template>
 <style lang="scss" scoped>
@@ -426,9 +431,15 @@ const handleReset = () => {
         font-size: 0.675rem;
         letter-spacing: 0.05em;
         .form-field {
-          border-radius: 0.2em;
+          border-radius: 0.8em;
           border: 0.1em solid $gray-200;
           padding: 1em;
+        }
+        .error-color {
+          border-color: $red-400;
+        }
+        .marked-field-color {
+          border-color: $purple-950;
         }
       }
       &__error-info {
@@ -439,6 +450,7 @@ const handleReset = () => {
         grid-column: 1/ -1;
       }
     }
+
     .success-notification-container {
       display: flex;
       flex-direction: column;
