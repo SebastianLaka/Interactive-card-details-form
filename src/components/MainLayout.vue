@@ -320,10 +320,10 @@ const handleReset = () => {
 </template>
 <style lang="scss" scoped>
 @use '../assets/sass/colors' as *;
+@use "../assets/sass/mixins" as *;
 @media (min-width: 375px) {
   .main-area {
-    display: flex;
-    flex-direction: column;
+    @include flex-center;
     justify-content: space-between;
     height: 100svh;
     position: relative;
@@ -361,9 +361,8 @@ const handleReset = () => {
       background-image: url('../assets/images/bg-card-front.png');
       left: 0.75em;
       top: 164px;
-      display: flex;
+      @include flex-center;
       justify-content: space-between;
-      flex-direction: column;
       padding: 1.25em;
       transform: translateY(10vw);
       &__card-image {
@@ -372,8 +371,7 @@ const handleReset = () => {
         height: 2.5em;
       }
       .card-front-data {
-        display: flex;
-        flex-direction: column;
+        @include flex-center;
         justify-content: space-between;
         &__card-number {
           color: $gray-200;
@@ -424,8 +422,7 @@ const handleReset = () => {
         min-width: 50%;
       }
       .form-label-area {
-        display: flex;
-        flex-direction: column;
+        @include flex-center;
         justify-content: center;
         gap: 0.4em 0;
         font-size: 0.675rem;
@@ -452,8 +449,7 @@ const handleReset = () => {
     }
 
     .success-notification-container {
-      display: flex;
-      flex-direction: column;
+      @include flex-center;
       align-items: center;
       gap: 2em 0;
       width: 75%;
